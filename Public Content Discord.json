@@ -1,0 +1,259 @@
+{
+  "name": "Public Content Discord",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw",
+          "mode": "list",
+          "cachedResultName": "Publicaciones pendientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        48
+      ],
+      "id": "6387a36b-a635-49bb-99d7-c1c24b67e915",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "ioF8mUz3dSofO9y8",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "147ab577-6f51-4204-91e1-33d22e3998cc",
+              "leftValue": "={{ $json.Publicada }}",
+              "rightValue": "✔",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        128,
+        48
+      ],
+      "id": "8ecdfd0c-68a1-457c-bd0a-75b002e48077",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1206784516442820628",
+          "mode": "id"
+        },
+        "sendTo": "user",
+        "userId": {
+          "__rl": true,
+          "value": "809015116175376414",
+          "mode": "id"
+        },
+        "content": "=#  {{ $json.Titulo }}\n\n{{ $json.Contenido }}\n\n{{ $json.Imagenes }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        336,
+        48
+      ],
+      "id": "c25efd5a-71db-47cf-97a2-5488db8f3c6f",
+      "name": "Create a channel",
+      "webhookId": "3900afcf-46f7-4346-b7ea-96d41a1585aa",
+      "credentials": {
+        "discordBotApi": {
+          "id": "1UpxG30caSyDQaoh",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw",
+          "mode": "list",
+          "cachedResultName": "Publicaciones pendientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Main sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17te7D7ky6O_u2CyVOmBQj53fGpfONuQhKSJwAb4X6pw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Publicada": "✔",
+            "Titulo": "={{ $('Filter').item.json.Titulo }}",
+            "Contenido": "={{ $('Filter').item.json.Contenido }}",
+            "Imagenes": "={{ $('Filter').item.json.Imagenes }}"
+          },
+          "matchingColumns": [
+            "Titulo"
+          ],
+          "schema": [
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Contenido",
+              "displayName": "Contenido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Imagenes",
+              "displayName": "Imagenes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Publicada",
+              "displayName": "Publicada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        48
+      ],
+      "id": "66f1b2e7-4750-40bf-97a1-07723fc13b0b",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IXhA90ClYCdTb1IM",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Create a channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a channel": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "59d65055-55e1-459f-9193-38119a71a9a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b4ce499dd54e0958a9a7273d6b016310d08a100c93eb53087c344e754aea6959"
+  },
+  "id": "9xR4HH6grUfCZF5yFHam4",
+  "tags": []
+}
